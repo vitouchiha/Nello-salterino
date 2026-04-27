@@ -717,136 +717,138 @@ export default function App() {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       stopBGM();
     };
-  }, [highScore]); // Dipendenza ridotta apposta per non riavviare il loop se non necessario
+  }, [highScore]);
 
   return (
     <div 
-      className="min-h-screen bg-[#1a1a1a] flex flex-col items-center justify-center p-4 select-none touch-none"
+      className="min-h-screen bg-[#1a1a1a] flex flex-col items-center justify-center p-2 sm:p-4 select-none touch-none"
       onClick={jump} // Salta al touch ovunque
     >
-      <div className="w-full max-w-4xl flex items-center justify-between mb-4 text-white uppercase" style={{ textShadow: '4px 4px 0 #000' }}>
+      <div className="w-full max-w-4xl flex items-center justify-between mb-4 text-white uppercase" style={{ textShadow: '2px 2px 0 #000' }}>
         <div>
-          <h1 className="text-3xl text-white mb-2">Nello Salterino</h1>
-          <p className="text-white text-xs tracking-wider" style={{ textShadow: '2px 2px 0 #000' }}>Tocca o premi Spazio x saltare e prendere i wurstel</p>
+          <h1 className="text-lg sm:text-3xl text-white mb-1 sm:mb-2">Nello Salterino</h1>
+          <p className="text-white text-[8px] sm:text-xs tracking-wider" style={{ textShadow: '1px 1px 0 #000' }}>Tocca x saltare e prendere wurstel</p>
         </div>
         <div className="text-right">
-          <p className="text-white text-lg">Score: {score.toString().padStart(4, '0')}</p>
-          <p className="text-white text-sm">HI-Score: {highScore.toString().padStart(4, '0')}</p>
+          <p className="text-white text-sm sm:text-lg">Score: {score.toString().padStart(4, '0')}</p>
+          <p className="text-white text-[10px] sm:text-sm">HI-Score: {highScore.toString().padStart(4, '0')}</p>
         </div>
       </div>
 
-      <div className="relative border-[8px] border-[#333] bg-[#70c5ce] box-border">
+      <div className="relative border-[4px] sm:border-[8px] border-[#333] bg-[#70c5ce] box-border w-full max-w-4xl overflow-hidden aspect-[2/1] sm:aspect-auto">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
-          className="w-full max-w-[800px] h-auto block"
+          className="w-full h-full sm:h-auto block object-cover"
         />
-        
-        {/* Schermate di UI sovraimpresse */}
-        {gameState === 'START' && (
-          <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-20 text-white text-center">
-            <h1 className="text-3xl lg:text-4xl mb-2 text-white" style={{ textShadow: '4px 4px 0 #000' }}>NELLO SALTERINO</h1>
-            <p className="mt-2 text-sm mb-6 text-[#70c5ce]" style={{ textShadow: '2px 2px 0 #000' }}>SCEGLI IL TUO PERSONAGGIO</p>
-            
-            <div className="flex gap-4 sm:gap-12 mb-4" onClick={(e) => e.stopPropagation()}>
-              <div 
-                className={`p-4 cursor-pointer transition-all duration-300 flex flex-col items-center ${character === 'nello' ? 'scale-110 drop-shadow-[0_0_15px_rgba(241,196,15,0.8)]' : 'opacity-50 hover:opacity-100 hover:scale-105'}`}
-                onClick={() => setCharacter('nello')}
-              >
-                <div className={`w-28 h-28 sm:w-32 sm:h-32 mb-2 ${character === 'nello' ? 'animate-bounce' : ''}`}>
-                  <svg viewBox="0 0 16 16" width="100%" height="100%" style={{imageRendering: 'pixelated'}}>
-                    <rect x="4" y="3" width="8" height="10" fill="#111" />
-                    <rect x="3" y="10" width="10" height="4" fill="#4a3b32" />
-                    <rect x="7" y="10" width="2" height="2" fill="#000" />
-                    <rect x="5" y="7" width="2" height="2" fill="#fff" />
-                    <rect x="6" y="8" width="1" height="1" fill="#000" />
-                    <rect x="9" y="7" width="2" height="2" fill="#fff" />
-                    <rect x="9" y="8" width="1" height="1" fill="#000" />
-                    <rect x="3" y="3" width="2" height="5" fill="#111" />
-                    <rect x="11" y="3" width="2" height="5" fill="#111" />
-                  </svg>
-                </div>
-                <h3 className="text-4xl sm:text-5xl uppercase font-bold tracking-wider" style={{
-                  background: 'linear-gradient(to bottom, #FFF129 0%, #F57200 48%, #E50000 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  WebkitTextStroke: '2px #000',
-                  filter: 'drop-shadow(4px 4px 0px #000)'
-                }}>
-                  NELLO
-                </h3>
+      </div>
+
+      {/* Schermate di UI sovraimpresse - fisse a schermo intero o centrate */}
+      {gameState === 'START' && (
+        <div className="fixed inset-0 bg-[#1a1a1a]/95 flex flex-col items-center justify-center z-50 text-white text-center p-4">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl mb-2 text-white" style={{ textShadow: '4px 4px 0 #000' }}>NELLO SALTERINO</h1>
+          <p className="mt-2 text-[10px] sm:text-sm mb-6 text-[#70c5ce]" style={{ textShadow: '2px 2px 0 #000' }}>SCEGLI IL TUO PERSONAGGIO</p>
+          
+          <div className="flex gap-4 sm:gap-12 mb-4" onClick={(e) => e.stopPropagation()}>
+            <div 
+              className={`p-2 sm:p-4 cursor-pointer transition-all duration-300 flex flex-col items-center ${character === 'nello' ? 'scale-110 drop-shadow-[0_0_15px_rgba(241,196,15,0.8)]' : 'opacity-50 hover:opacity-100 hover:scale-105'}`}
+              onClick={() => setCharacter('nello')}
+            >
+              <div className={`w-20 h-20 sm:w-32 sm:h-32 mb-2 ${character === 'nello' ? 'animate-bounce' : ''}`}>
+                <svg viewBox="0 0 16 16" width="100%" height="100%" style={{imageRendering: 'pixelated'}}>
+                  <rect x="4" y="3" width="8" height="10" fill="#111" />
+                  <rect x="3" y="10" width="10" height="4" fill="#4a3b32" />
+                  <rect x="7" y="10" width="2" height="2" fill="#000" />
+                  <rect x="5" y="7" width="2" height="2" fill="#fff" />
+                  <rect x="6" y="8" width="1" height="1" fill="#000" />
+                  <rect x="9" y="7" width="2" height="2" fill="#fff" />
+                  <rect x="9" y="8" width="1" height="1" fill="#000" />
+                  <rect x="3" y="3" width="2" height="5" fill="#111" />
+                  <rect x="11" y="3" width="2" height="5" fill="#111" />
+                </svg>
               </div>
-              <div 
-                className={`p-4 cursor-pointer transition-all duration-300 flex flex-col items-center ${character === 'pixie' ? 'scale-110 drop-shadow-[0_0_15px_rgba(241,196,15,0.8)]' : 'opacity-50 hover:opacity-100 hover:scale-105'}`}
-                onClick={() => setCharacter('pixie')}
-              >
-                <div className={`w-28 h-28 sm:w-32 sm:h-32 mb-2 ${character === 'pixie' ? 'animate-bounce' : ''}`}>
-                  <svg viewBox="0 0 16 16" width="100%" height="100%" style={{imageRendering: 'pixelated'}}>
-                    <rect x="2" y="1" width="4" height="4" fill="#bfa68d" />
-                    <rect x="3" y="2" width="2" height="3" fill="#e5a5a5" />
-                    <rect x="10" y="1" width="4" height="4" fill="#bfa68d" />
-                    <rect x="11" y="2" width="2" height="3" fill="#e5a5a5" />
-                    <rect x="2" y="5" width="12" height="9" fill="#bfa68d" />
-                    <rect x="4" y="5" width="2" height="3" fill="#5c4e40" />
-                    <rect x="7" y="5" width="2" height="3" fill="#5c4e40" />
-                    <rect x="10" y="5" width="2" height="3" fill="#5c4e40" />
-                    <rect x="4" y="8" width="3" height="3" fill="#000" />
-                    <rect x="4" y="9" width="1" height="1" fill="#b5e550" />
-                    <rect x="9" y="8" width="3" height="3" fill="#000" />
-                    <rect x="11" y="9" width="1" height="1" fill="#b5e550" />
-                    <rect x="6" y="11" width="4" height="3" fill="#e8d5c4" />
-                    <rect x="7" y="11" width="2" height="1" fill="#e5a5a5" />
-                    <rect x="0" y="11" width="3" height="1" fill="#fff" />
-                    <rect x="0" y="13" width="3" height="1" fill="#fff" />
-                    <rect x="13" y="11" width="3" height="1" fill="#fff" />
-                    <rect x="13" y="13" width="3" height="1" fill="#fff" />
-                  </svg>
-                </div>
-                <h3 className="text-4xl sm:text-5xl uppercase font-bold tracking-wider" style={{
-                  background: 'linear-gradient(to bottom, #FFF129 0%, #F57200 48%, #E50000 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  WebkitTextStroke: '2px #000',
-                  filter: 'drop-shadow(4px 4px 0px #000)'
-                }}>
-                  PIXIE
-                </h3>
-              </div>
+              <h3 className="text-2xl sm:text-5xl uppercase font-bold tracking-wider" style={{
+                background: 'linear-gradient(to bottom, #FFF129 0%, #F57200 48%, #E50000 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                WebkitTextStroke: '1px #000',
+                filter: 'drop-shadow(2px 2px 0px #000)'
+              }}>
+                NELLO
+              </h3>
             </div>
-
-            <button 
-              className="bg-[#f1c40f] border-x-0 border-t-0 border-b-[8px] border-[#f39c12] px-10 py-5 text-xl lg:text-2xl text-[#333] cursor-pointer mt-5 active:border-b-0 active:mt-[28px] transition-all font-[inherit]"
-              onClick={(e) => { e.stopPropagation(); jump(); }}
+            <div 
+              className={`p-2 sm:p-4 cursor-pointer transition-all duration-300 flex flex-col items-center ${character === 'pixie' ? 'scale-110 drop-shadow-[0_0_15px_rgba(241,196,15,0.8)]' : 'opacity-50 hover:opacity-100 hover:scale-105'}`}
+              onClick={() => setCharacter('pixie')}
             >
-              START GAME
-            </button>
+              <div className={`w-20 h-20 sm:w-32 sm:h-32 mb-2 ${character === 'pixie' ? 'animate-bounce' : ''}`}>
+                <svg viewBox="0 0 16 16" width="100%" height="100%" style={{imageRendering: 'pixelated'}}>
+                  <rect x="2" y="1" width="4" height="4" fill="#bfa68d" />
+                  <rect x="3" y="2" width="2" height="3" fill="#e5a5a5" />
+                  <rect x="10" y="1" width="4" height="4" fill="#bfa68d" />
+                  <rect x="11" y="2" width="2" height="3" fill="#e5a5a5" />
+                  <rect x="2" y="5" width="12" height="9" fill="#bfa68d" />
+                  <rect x="4" y="5" width="2" height="3" fill="#5c4e40" />
+                  <rect x="7" y="5" width="2" height="3" fill="#5c4e40" />
+                  <rect x="10" y="5" width="2" height="3" fill="#5c4e40" />
+                  <rect x="4" y="8" width="3" height="3" fill="#000" />
+                  <rect x="4" y="9" width="1" height="1" fill="#b5e550" />
+                  <rect x="9" y="8" width="3" height="3" fill="#000" />
+                  <rect x="11" y="9" width="1" height="1" fill="#b5e550" />
+                  <rect x="6" y="11" width="4" height="3" fill="#e8d5c4" />
+                  <rect x="7" y="11" width="2" height="1" fill="#e5a5a5" />
+                  <rect x="0" y="11" width="3" height="1" fill="#fff" />
+                  <rect x="0" y="13" width="3" height="1" fill="#fff" />
+                  <rect x="13" y="11" width="3" height="1" fill="#fff" />
+                  <rect x="13" y="13" width="3" height="1" fill="#fff" />
+                </svg>
+              </div>
+              <h3 className="text-2xl sm:text-5xl uppercase font-bold tracking-wider" style={{
+                background: 'linear-gradient(to bottom, #FFF129 0%, #F57200 48%, #E50000 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                WebkitTextStroke: '1px #000',
+                filter: 'drop-shadow(2px 2px 0px #000)'
+              }}>
+                PIXIE
+              </h3>
+            </div>
           </div>
-        )}
 
-        {gameState === 'GAMEOVER' && (
-          <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center z-20 text-white text-center">
-            <h1 className="text-3xl lg:text-4xl mb-2 text-white" style={{ textShadow: '4px 4px 0 #000' }}>GAME OVER</h1>
-            <p className="text-[#f1c40f] mb-4 text-lg" style={{ textShadow: '2px 2px 0 #000' }}>Hai preso un ostacolo!</p>
-            <button 
-              className="bg-[#f1c40f] border-x-0 border-t-0 border-b-[8px] border-[#f39c12] px-10 py-5 text-xl lg:text-2xl text-[#333] cursor-pointer mt-5 active:border-b-0 active:mt-[28px] transition-all font-[inherit]"
-              onClick={(e) => { e.stopPropagation(); jump(); }}
-            >
-              RETRY
-            </button>
-          </div>
-        )}
-      </div>
+          <button 
+            className="bg-[#f1c40f] border-x-0 border-t-0 border-b-[8px] border-[#f39c12] px-6 py-4 sm:px-10 sm:py-5 text-lg sm:text-2xl text-[#333] cursor-pointer mt-5 active:border-b-0 active:mt-[28px] transition-all font-[inherit]"
+            onClick={(e) => { e.stopPropagation(); jump(); }}
+          >
+            START GAME
+          </button>
+        </div>
+      )}
 
-      <div className="mt-8 max-w-4xl w-full flex justify-center">
-        {/* Controlli on-screen visibili su mobile come hint (anche se l'intero schermo reagisce al tap) */}
-        <button 
-          className="md:hidden bg-[#f1c40f] border-x-0 border-t-0 border-b-[8px] border-[#f39c12] px-8 py-4 text-xl text-[#333] cursor-pointer active:border-b-0 active:mt-[8px] transition-all font-[inherit]"
-          onClick={(e) => { e.stopPropagation(); jump(); }}
-        >
-          SALTA!
-        </button>
-      </div>
+      {gameState === 'GAMEOVER' && (
+        <div className="fixed inset-0 bg-[#1a1a1a]/95 flex flex-col items-center justify-center z-50 text-white text-center p-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl mb-2 text-white" style={{ textShadow: '4px 4px 0 #000' }}>GAME OVER</h1>
+          <p className="text-[#f1c40f] mb-4 text-base sm:text-lg" style={{ textShadow: '2px 2px 0 #000' }}>Hai preso un ostacolo!</p>
+          <button 
+            className="bg-[#f1c40f] border-x-0 border-t-0 border-b-[8px] border-[#f39c12] px-8 py-4 sm:px-10 sm:py-5 text-xl sm:text-2xl text-[#333] cursor-pointer mt-5 active:border-b-0 active:mt-[28px] transition-all font-[inherit]"
+            onClick={(e) => { e.stopPropagation(); jump(); }}
+          >
+            RETRY
+          </button>
+        </div>
+      )}
+
+      {/* Pulsante SALTA per mobile, visibile solo se stiamo giocando */}
+      {gameState === 'PLAYING' && (
+        <div className="mt-4 sm:mt-8 max-w-4xl w-full flex justify-center z-10 relative">
+          <button 
+            className="md:hidden bg-[#f1c40f] border-x-0 border-t-0 border-b-[8px] border-[#f39c12] px-8 py-4 text-xl text-[#333] cursor-pointer active:border-b-0 active:mt-[8px] transition-all font-[inherit]"
+            onClick={(e) => { e.stopPropagation(); jump(); }}
+          >
+            SALTA!
+          </button>
+        </div>
+      )}
 
     </div>
   );
